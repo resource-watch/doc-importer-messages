@@ -1,4 +1,5 @@
 const uuid = require('uuid4');
+const InvalidMessage = require('./invalid-message.error');
 
 const MESSAGE_TYPES = {
     DATA: 'DATA'
@@ -8,6 +9,7 @@ const MESSAGE_TYPES = {
  * Represents a Message.
  * @constructor
  * @param {string} type - The type of the message.
+ * @param {string} taskId - The taskId of the message.
  */
 class Message {
 
@@ -19,10 +21,10 @@ class Message {
 
     validate() {
         if (!this.type) {
-            throw new Error('Invalid message type');
+            throw new InvalidMessage('Invalid message type');
         }
         if (!this.taskId) {
-            throw new Error('Invalid taskId');
+            throw new InvalidMessage('Invalid taskId');
         }
     }
 
@@ -31,7 +33,6 @@ class Message {
 /**
  * Represents a DataMessage.
  * @constructor
- * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
  * @param {Array} props.data - Data to save
@@ -47,7 +48,7 @@ class DataMessage extends Message {
     validate() {
         super.validate();
         if (!this.data) {
-            throw new Error('Data empty');
+            throw new InvalidMessage('Empty data prop');
         }
     }
 
@@ -58,10 +59,10 @@ function createMessage(type, props) {
 
     switch (type) {
 
-        case MESSAGE_TYPES.DATA:
-            return new DataMessage(props);
-        default:
-            return new Message(type);
+    case MESSAGE_TYPES.DATA:
+        return new DataMessage(props);
+    default:
+        throw new InvalidMessage('Invalid Type');
 
     }
 

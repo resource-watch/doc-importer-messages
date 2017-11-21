@@ -1,17 +1,11 @@
-const message = require('.');
+const { task, status, data, execution, InvalidMessage } = require('.');
 
-/* Creating messages */
-const createMessage = message('CREATE', {});
-const concatMessage = message('CONCAT', {});
-const overwriteMessage = message('CREATE', {});
-const deleteMessage = message('DELETE', {
-    query: 'query'
-});
-
-/* Catching errors */
+/* Create Task Message */
 try {
-    const nonMessage = message('NON', {});
-    const badDeleteMessage = message('DELETE', {});
+    const msgOne = task.createMessage(task.MESSAGE_TYPES.PEPE);
+    console.log(msgOne);
 } catch (err) {
-    console.log('OK');
+    if (err instanceof InvalidMessage) {
+        console.log('Invalid Message');
+    }
 }

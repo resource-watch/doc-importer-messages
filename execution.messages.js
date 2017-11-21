@@ -1,4 +1,5 @@
 const uuid = require('uuid4');
+const InvalidMessage = require('./invalid-message.error');
 
 const MESSAGE_TYPES = {
     EXECUTION_CREATE: 'EXECUTION_CREATE',
@@ -11,6 +12,7 @@ const MESSAGE_TYPES = {
  * Represents a Message.
  * @constructor
  * @param {string} type - The type of the message.
+ * @param {string} taskId - The taskId of the message.
  */
 class Message {
 
@@ -22,10 +24,10 @@ class Message {
 
     validate() {
         if (!this.type) {
-            throw new Error('Invalid message type');
+            throw new InvalidMessage('Invalid message type');
         }
         if (!this.taskId) {
-            throw new Error('Invalid taskId');
+            throw new InvalidMessage('Invalid taskId');
         }
     }
 
@@ -34,7 +36,6 @@ class Message {
 /**
  * Represents a CreateMessage.
  * @constructor
- * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
  */
@@ -53,7 +54,7 @@ class CreateMessage extends Message {
     validate() {
         super.validate();
         if (!this.datasetId) {
-            throw new Error('DatasetId required');
+            throw new Error('datasetId required');
         }
     }
 
@@ -63,7 +64,6 @@ class CreateMessage extends Message {
 /**
  * Represents a ConcatMessage.
  * @constructor
- * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
  */
@@ -83,10 +83,10 @@ class ConcatMessage extends Message {
     validate() {
         super.validate();
         if (!this.datasetId) {
-            throw new Error('DatasetId required');
+            throw new InvalidMessage('DatasetId required');
         }
         if (!this.index) {
-            throw new Error('Index required');
+            throw new InvalidMessage('Index required');
         }
     }
 
@@ -95,7 +95,6 @@ class ConcatMessage extends Message {
 /**
  * Represents a DeleteMessage.
  * @constructor
- * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
  */
@@ -110,7 +109,7 @@ class DeleteMessage extends Message {
     validate() {
         super.validate();
         if (!this.query) {
-            throw new Error('Query required');
+            throw new InvalidMessage('Query required');
         }
     }
 
@@ -119,7 +118,6 @@ class DeleteMessage extends Message {
 /**
  * Represents a ConfirmDeleteMessage.
  * @constructor
- * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
  */
@@ -134,7 +132,7 @@ class ConfirmDeleteMessage extends Message {
     validate() {
         super.validate();
         if (!this.elasticTaskId) {
-            throw new Error('ElasticTaskId required');
+            throw new InvalidMessage('ElasticTaskId required');
         }
     }
 
@@ -144,16 +142,16 @@ function createMessage(type, props) {
 
     switch (type) {
 
-        case MESSAGE_TYPES.EXECUTION_CREATE:
-            return new CreateMessage(props.taskId, props);
-        case MESSAGE_TYPES.EXECUTION_CONCAT:
-            return new ConcatMessage(props.taskId, props);
-        case MESSAGE_TYPES.EXECUTION_DELETE:
-            return new DeleteMessage(props.taskId, props);
-        case MESSAGE_TYPES.EXECUTION_CONFIRM_DELETE:
-            return new ConfirmDeleteMessage(props.taskId, props);
-        default:
-            return new Message(type);
+    case MESSAGE_TYPES.EXECUTION_CREATE:
+        return new CreateMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_CONCAT:
+        return new ConcatMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_DELETE:
+        return new DeleteMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_CONFIRM_DELETE:
+        return new ConfirmDeleteMessage(props.taskId, props);
+    default:
+        throw new InvalidMessage('Invalid Type');
 
     }
 
