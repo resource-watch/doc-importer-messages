@@ -2,6 +2,7 @@ const task = require('./task.messages');
 const status = require('./status.messages');
 const data = require('./data.messages');
 const execution = require('./data.messages');
+const InvalidMessage = require('./invalid-message.error');
 
 module.exports = {
     task: {
@@ -19,5 +20,6 @@ module.exports = {
     execution: {
         createMessage: execution.createMessage,
         MESSAGE_TYPES: execution.MESSAGE_TYPES
-    }
+    },
+    InvalidMessage
 };
