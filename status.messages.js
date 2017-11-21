@@ -39,7 +39,7 @@ class Message {
 class ReadMessage extends Message {
 
     constructor(taskId) {
-        super(MESSAGE_TYPES.READ, taskId);
+        super(MESSAGE_TYPES.STATUS_READ, taskId);
         this.validate();
     }
 
@@ -58,7 +58,7 @@ class ReadMessage extends Message {
 class WriteMessage extends Message {
 
     constructor(taskId) {
-        super(MESSAGE_TYPES.WRITE, taskId);
+        super(MESSAGE_TYPES.STATUS_WRITE, taskId);
         this.validate();
     }
 
@@ -77,7 +77,7 @@ class WriteMessage extends Message {
 class CheckDeleteMessage extends Message {
 
     constructor(taskId) {
-        super(MESSAGE_TYPES.WRITE, taskId);
+        super(MESSAGE_TYPES.STATUS_CHECK_DELETE, taskId);
         this.lastCheckedDate = new Date();
         this.validate();
     }
