@@ -32,22 +32,31 @@ class Message {
 /**
  * Represents a CreateMessage.
  * @constructor
- * @param {string} props - The propr of the message.
+ * @param {string} props - The props of the message.
  */
 class CreateMessage extends Message {
 
     constructor(props) {
         super(MESSAGE_TYPES.TASK_CREATE);
+        this.datasetId = props.datasetId;
         this.fileUrl = props.fileUrl;
         this.data = props.data;
-        this.legend = props.legend;
         this.provider = props.provider;
-        this.datasetId = props.datasetId;
+        this.legend = props.legend;
         this.validate();
     }
 
     validate() {
         super.validate();
+        if (!this.datasetId) {
+            throw new InvalidMessage('DatasetId is required');
+        }
+        if (!this.provider) {
+            throw new InvalidMessage('Provider is required');
+        }
+        if (!this.fileUrl && !this.data) {
+            throw new InvalidMessage('Data or fileUrl is required');
+        }
     }
 
 }
@@ -55,23 +64,35 @@ class CreateMessage extends Message {
 /**
  * Represents a ConcatMessage.
  * @constructor
- * @param {string} props - The propr of the message.
+ * @param {string} props - The props of the message.
  */
 class ConcatMessage extends Message {
 
     constructor(props) {
         super(MESSAGE_TYPES.TASK_CONCAT);
+        this.datasetId = props.datasetId;
         this.fileUrl = props.fileUrl;
         this.data = props.data;
-        this.legend = props.legend;
         this.provider = props.provider;
-        this.datasetId = props.datasetId;
+        this.legend = props.legend;
         this.index = props.index;
         this.validate();
     }
 
     validate() {
         super.validate();
+        if (!this.datasetId) {
+            throw new InvalidMessage('DatasetId is required');
+        }
+        if (!this.index) {
+            throw new InvalidMessage('Index is required');
+        }
+        if (!this.provider) {
+            throw new InvalidMessage('Provider is required');
+        }
+        if (!this.fileUrl && !this.data) {
+            throw new InvalidMessage('Data or fileUrl is required');
+        }
     }
 
 }
@@ -79,23 +100,35 @@ class ConcatMessage extends Message {
 /**
  * Represents an OverwriteMessage.
  * @constructor
- * @param {string} props - The propr of the message.
+ * @param {string} props - The props of the message.
  */
 class OverwriteMessage extends Message {
 
     constructor(props) {
         super(MESSAGE_TYPES.TASK_OVERWRITE);
+        this.datasetId = props.datasetId;
         this.fileUrl = props.fileUrl;
         this.data = props.data;
-        this.legend = props.legend;
         this.provider = props.provider;
-        this.datasetId = props.datasetId;
+        this.legend = props.legend;
         this.index = props.index;
         this.validate();
     }
 
     validate() {
         super.validate();
+        if (!this.datasetId) {
+            throw new InvalidMessage('DatasetId is required');
+        }
+        if (!this.index) {
+            throw new InvalidMessage('Index is required');
+        }
+        if (!this.provider) {
+            throw new InvalidMessage('Provider is required');
+        }
+        if (!this.fileUrl && !this.data) {
+            throw new InvalidMessage('Data or fileUrl is required');
+        }
     }
 
 }
@@ -103,13 +136,13 @@ class OverwriteMessage extends Message {
 /**
  * Represents a DeleteMessage.
  * @constructor
- * @param {string} props - The propr of the message.
+ * @param {string} props - The props of the message.
  */
 class DeleteMessage extends Message {
 
     constructor(props) {
         super(MESSAGE_TYPES.TASK_DELETE);
-        this.query = props.query ? props.query : null;
+        this.query = props.query;
         this.validate();
     }
 
@@ -124,15 +157,15 @@ class DeleteMessage extends Message {
 }
 
 /**
- * Represents a DeleteMessage.
+ * Represents a DeleteIndexMessage.
  * @constructor
- * @param {string} props - The propr of the message.
+ * @param {string} props - The props of the message.
  */
 class DeleteIndexMessage extends Message {
 
     constructor(props) {
         super(MESSAGE_TYPES.TASK_DELETE_INDEX);
-        this.index = props.index ? props.index : null;
+        this.index = props.index;
         this.validate();
     }
 
