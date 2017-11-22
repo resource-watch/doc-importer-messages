@@ -5,6 +5,7 @@ const MESSAGE_TYPES = {
     EXECUTION_CREATE: 'EXECUTION_CREATE',
     EXECUTION_CONCAT: 'EXECUTION_CONCAT',
     EXECUTION_DELETE: 'EXECUTION_DELETE',
+    EXECUTION_DELETE_INDEX: 'EXECUTION_DELETE_INDEX',
     EXECUTION_CONFIRM_DELETE: 'EXECUTION_CONFIRM_DELETE'
 };
 
@@ -101,7 +102,7 @@ class ConcatMessage extends Message {
 class DeleteMessage extends Message {
 
     constructor(taskId, props) {
-        super(MESSAGE_TYPES.EXECUTION_CONCAT, taskId);
+        super(MESSAGE_TYPES.EXECUTION_DELETE, taskId);
         this.query = props.query;
         this.validate();
     }
@@ -124,7 +125,7 @@ class DeleteMessage extends Message {
 class ConfirmDeleteMessage extends Message {
 
     constructor(taskId, props) {
-        super(MESSAGE_TYPES.EXECUTION_CONCAT, taskId);
+        super(MESSAGE_TYPES.EXECUTION_CONFIRM_DELETE, taskId);
         this.elasticTaskId = props.elasticTaskId;
         this.validate();
     }
@@ -133,6 +134,29 @@ class ConfirmDeleteMessage extends Message {
         super.validate();
         if (!this.elasticTaskId) {
             throw new InvalidMessage('ElasticTaskId required');
+        }
+    }
+
+}
+
+/**
+ * Represents a ConfirmDeleteMessage.
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ * @param {object} props - The props of the message.
+ */
+class DeleteIndexMessage extends Message {
+
+    constructor(taskId, props) {
+        super(MESSAGE_TYPES.EXECUTION_DELETE_INDEX, taskId);
+        this.index = props.index;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.index) {
+            throw new InvalidMessage('Index required');
         }
     }
 
@@ -150,6 +174,8 @@ function createMessage(type, props) {
         return new DeleteMessage(props.taskId, props);
     case MESSAGE_TYPES.EXECUTION_CONFIRM_DELETE:
         return new ConfirmDeleteMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_DELETE_INDEX:
+        return new DeleteIndexMessage(props.taskId, props);
     default:
         throw new InvalidMessage('Invalid Type');
 
