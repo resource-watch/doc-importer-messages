@@ -5,7 +5,8 @@ const MESSAGE_TYPES = {
     TASK_CREATE: 'TASK_CREATE',
     TASK_CONCAT: 'TASK_CONCAT',
     TASK_OVERWRITE: 'TASK_OVERWRITE',
-    TASK_DELETE: 'TASK_DELETE'
+    TASK_DELETE: 'TASK_DELETE',
+    TASK_DELETE_INDEX: 'TASK_DELETE_INDEX'
 };
 
 /**
@@ -122,6 +123,29 @@ class DeleteMessage extends Message {
 
 }
 
+/**
+ * Represents a DeleteMessage.
+ * @constructor
+ * @param {string} props - The propr of the message.
+ */
+class DeleteIndexMessage extends Message {
+
+    constructor(props) {
+        super(MESSAGE_TYPES.TASK_DELETE_INDEX);
+        this.index = props.index ? props.index : null;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.index) {
+            throw new InvalidMessage('Index required');
+        }
+        return true;
+    }
+
+}
+
 function createMessage(type, props) {
 
     switch (type) {
@@ -134,6 +158,8 @@ function createMessage(type, props) {
         return new OverwriteMessage(props);
     case MESSAGE_TYPES.TASK_DELETE:
         return new DeleteMessage(props);
+    case MESSAGE_TYPES.TASK_DELETE_INDEX:
+        return new DeleteIndexMessage(props);
     default:
         throw new InvalidMessage('Invalid Type');
 

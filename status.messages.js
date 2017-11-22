@@ -8,7 +8,8 @@ const MESSAGE_TYPES = {
     STATUS_WRITTEN_DATA: 'STATUS_WRITTEN_DATA',
     STATUS_PERFORMED_DELETE_QUERY: 'STATUS_PERFORMED_DELETE_QUERY',
     STATUS_FINISHED_DELETE_QUERY: 'STATUS_FINISHED_DELETE_QUERY',
-    STATUS_INDEX_DELETED: 'STATUS_INDEX_DELETED'
+    STATUS_INDEX_DELETED: 'STATUS_INDEX_DELETED',
+    STATUS_INDEX_CONFIRMED: 'STATUS_INDEX_CONFIRMED'
 };
 
 /**
@@ -172,6 +173,26 @@ class IndexDeletedMessage extends Message {
 
 }
 
+/**
+ * Represents a CheckDeleteMessage.
+ * @constructor
+ * @param {string} type - The type of the message.
+ * @param {string} taskId - The taskId of the message.
+ */
+class IndexConfirmedMessage extends Message {
+
+    constructor(taskId) {
+        super(MESSAGE_TYPES.STATUS_INDEX_CONFIRMED, taskId);
+        this.lastCheckedDate = new Date();
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+    }
+
+}
+
 function createMessage(type, props) {
 
     switch (type) {
@@ -190,6 +211,8 @@ function createMessage(type, props) {
         return new FinishedDeleteQuery(props.taskId);
     case MESSAGE_TYPES.STATUS_INDEX_DELETED:
         return new IndexDeletedMessage(props.taskId);
+    case MESSAGE_TYPES.STATUS_INDEX_CONFIRMED:
+        return new IndexConfirmedMessage(props.taskId);
     default:
         throw new InvalidMessage('Invalid Type');
 

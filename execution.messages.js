@@ -5,8 +5,9 @@ const MESSAGE_TYPES = {
     EXECUTION_CREATE: 'EXECUTION_CREATE',
     EXECUTION_CONCAT: 'EXECUTION_CONCAT',
     EXECUTION_DELETE: 'EXECUTION_DELETE',
+    EXECUTION_CONFIRM_DELETE: 'EXECUTION_CONFIRM_DELETE',
     EXECUTION_DELETE_INDEX: 'EXECUTION_DELETE_INDEX',
-    EXECUTION_CONFIRM_DELETE: 'EXECUTION_CONFIRM_DELETE'
+    EXECUTION_CONFIRM_INDEX_CREATION: 'EXECUTION_CONFIRM_INDEX_CREATION'
 };
 
 /**
@@ -162,6 +163,30 @@ class DeleteIndexMessage extends Message {
 
 }
 
+/**
+ * Represents a ConfirmDeleteMessage.
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ * @param {object} props - The props of the message.
+ */
+class ConfirmIndexCreationMessage extends Message {
+
+    constructor(taskId, props) {
+        super(MESSAGE_TYPES.EXECUTION_CONFIRM_INDEX_CREATION, taskId);
+        this.index = props.index;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.index) {
+            throw new InvalidMessage('Index required');
+        }
+    }
+
+}
+
+
 function createMessage(type, props) {
 
     switch (type) {
@@ -176,6 +201,8 @@ function createMessage(type, props) {
         return new ConfirmDeleteMessage(props.taskId, props);
     case MESSAGE_TYPES.EXECUTION_DELETE_INDEX:
         return new DeleteIndexMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_CONFIRM_INDEX_CREATION:
+        return new ConfirmIndexCreationMessage(props.taskId, props);
     default:
         throw new InvalidMessage('Invalid Type');
 
