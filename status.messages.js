@@ -6,7 +6,6 @@ const MESSAGE_TYPES = {
     STATUS_READ_DATA: 'STATUS_READ_DATA',
     STATUS_READ_FILE: 'STATUS_READ_FILE',
     STATUS_WRITTEN_DATA: 'STATUS_WRITTEN_DATA',
-    STATUS_WRITTEN_FILE: 'STATUS_WRITTEN_FILE',
     STATUS_PERFORMED_DELETE_QUERY: 'STATUS_PERFORMED_DELETE_QUERY',
     STATUS_FINISHED_DELETE_QUERY: 'STATUS_FINISHED_DELETE_QUERY',
     STATUS_INDEX_DELETED: 'STATUS_INDEX_DELETED'
@@ -114,25 +113,6 @@ class WrittenDataMessage extends Message {
 }
 
 /**
- * Represents a WriteMessage.
- * @constructor
- * @param {string} type - The type of the message.
- * @param {string} taskId - The taskId of the message.
- */
-class WrittenFileMessage extends Message {
-
-    constructor(taskId) {
-        super(MESSAGE_TYPES.STATUS_WRITTEN_FILE, taskId);
-        this.validate();
-    }
-
-    validate() {
-        super.validate();
-    }
-
-}
-
-/**
  * Represents a CheckDeleteMessage.
  * @constructor
  * @param {string} type - The type of the message.
@@ -204,8 +184,6 @@ function createMessage(type, props) {
         return new ReadFileMessage(props.taskId);
     case MESSAGE_TYPES.STATUS_WRITTEN_DATA:
         return new WrittenDataMessage(props.taskId);
-    case MESSAGE_TYPES.STATUS_WRITTEN_FILE:
-        return new WrittenFileMessage(props.taskId);
     case MESSAGE_TYPES.STATUS_PERFORMED_DELETE_QUERY:
         return new PerformedDeleteQueryMessage(props.taskId);
     case MESSAGE_TYPES.STATUS_FINISHED_DELETE_QUERY:
