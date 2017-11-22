@@ -2,11 +2,14 @@ const uuid = require('uuid4');
 const InvalidMessage = require('./invalid-message.error');
 
 const MESSAGE_TYPES = {
-    STATUS_READ: 'STATUS_READ',
-    STATUS_WRITE: 'STATUS_WRITE',
-    STATUS_CHECK_DELETE: 'STATUS_CHECK_DELETE',
-    START_READING: 'START_READING',
-    FINISH_READING: 'FINISH_READING'
+    STATUS_INDEX_CREATED: 'STATUS_INDEX_CREATED',
+    STATUS_READ_DATA: 'STATUS_READ_DATA',
+    STATUS_READ_FILE: 'STATUS_READ_FILE',
+    STATUS_WRITTEN_DATA: 'STATUS_WRITTEN_DATA',
+    STATUS_WRITTEN_FILE: 'STATUS_WRITTEN_FILE',
+    STATUS_PERFORMED_DELETE_QUERY: 'STATUS_PERFORMED_DELETE_QUERY',
+    STATUS_FINISHED_DELETE_QUERY: 'STATUS_FINISHED_DELETE_QUERY',
+    STATUS_INDEX_DELETED: 'STATUS_INDEX_DELETED'
 };
 
 /**
@@ -40,10 +43,10 @@ class Message {
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  */
-class ReadMessage extends Message {
+class IndexCreatedMessage extends Message {
 
     constructor(taskId) {
-        super(MESSAGE_TYPES.STATUS_READ, taskId);
+        super(MESSAGE_TYPES.STATUS_INDEX_CREATED, taskId);
         this.validate();
     }
 
@@ -59,10 +62,67 @@ class ReadMessage extends Message {
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  */
-class WriteMessage extends Message {
+class ReadDataMessage extends Message {
 
     constructor(taskId) {
-        super(MESSAGE_TYPES.STATUS_WRITE, taskId);
+        super(MESSAGE_TYPES.STATUS_READ_DATA, taskId);
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+    }
+
+}
+
+/**
+ * Represents a WriteMessage.
+ * @constructor
+ * @param {string} type - The type of the message.
+ * @param {string} taskId - The taskId of the message.
+ */
+class ReadFileMessage extends Message {
+
+    constructor(taskId) {
+        super(MESSAGE_TYPES.STATUS_READ_FILE, taskId);
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+    }
+
+}
+
+/**
+ * Represents a WriteMessage.
+ * @constructor
+ * @param {string} type - The type of the message.
+ * @param {string} taskId - The taskId of the message.
+ */
+class WrittenDataMessage extends Message {
+
+    constructor(taskId) {
+        super(MESSAGE_TYPES.STATUS_WRITTEN_DATA, taskId);
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+    }
+
+}
+
+/**
+ * Represents a WriteMessage.
+ * @constructor
+ * @param {string} type - The type of the message.
+ * @param {string} taskId - The taskId of the message.
+ */
+class WrittenFileMessage extends Message {
+
+    constructor(taskId) {
+        super(MESSAGE_TYPES.STATUS_WRITTEN_FILE, taskId);
         this.validate();
     }
 
@@ -78,10 +138,10 @@ class WriteMessage extends Message {
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  */
-class CheckDeleteMessage extends Message {
+class PerformedDeleteQueryMessage extends Message {
 
     constructor(taskId) {
-        super(MESSAGE_TYPES.STATUS_CHECK_DELETE, taskId);
+        super(MESSAGE_TYPES.STATUS_PERFORMED_DELETE_QUERY, taskId);
         this.lastCheckedDate = new Date();
         this.validate();
     }
@@ -93,15 +153,15 @@ class CheckDeleteMessage extends Message {
 }
 
 /**
- * Represents a StartReadingMessage.
+ * Represents a CheckDeleteMessage.
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  */
-class StartReadingMessage extends Message {
+class FinishedDeleteQuery extends Message {
 
     constructor(taskId) {
-        super(MESSAGE_TYPES.START_READING, taskId);
+        super(MESSAGE_TYPES.STATUS_FINISHED_DELETE_QUERY, taskId);
         this.lastCheckedDate = new Date();
         this.validate();
     }
@@ -113,15 +173,15 @@ class StartReadingMessage extends Message {
 }
 
 /**
- * Represents a FinishReadingMessage.
+ * Represents a CheckDeleteMessage.
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  */
-class FinishReadingMessage extends Message {
+class IndexDeletedMessage extends Message {
 
     constructor(taskId) {
-        super(MESSAGE_TYPES.FINISH_READING, taskId);
+        super(MESSAGE_TYPES.STATUS_INDEX_DELETED, taskId);
         this.lastCheckedDate = new Date();
         this.validate();
     }
@@ -136,16 +196,22 @@ function createMessage(type, props) {
 
     switch (type) {
 
-    case MESSAGE_TYPES.STATUS_READ:
-        return new ReadMessage(props.taskId);
-    case MESSAGE_TYPES.STATUS_WRITE:
-        return new WriteMessage(props.taskId);
-    case MESSAGE_TYPES.STATUS_CHECK_DELETE:
-        return new CheckDeleteMessage(props.taskId);
-    case MESSAGE_TYPES.START_READING:
-        return new StartReadingMessage(props.taskId);
-    case MESSAGE_TYPES.FINISH_READING:
-        return new FinishReadingMessage(props.taskId);
+    case MESSAGE_TYPES.STATUS_INDEX_CREATED:
+        return new IndexCreatedMessage(props.taskId);
+    case MESSAGE_TYPES.STATUS_READ_DATA:
+        return new ReadDataMessage(props.taskId);
+    case MESSAGE_TYPES.STATUS_READ_FILE:
+        return new ReadFileMessage(props.taskId);
+    case MESSAGE_TYPES.STATUS_WRITTEN_DATA:
+        return new WrittenDataMessage(props.taskId);
+    case MESSAGE_TYPES.STATUS_WRITTEN_FILE:
+        return new WrittenFileMessage(props.taskId);
+    case MESSAGE_TYPES.STATUS_PERFORMED_DELETE_QUERY:
+        return new PerformedDeleteQueryMessage(props.taskId);
+    case MESSAGE_TYPES.STATUS_FINISHED_DELETE_QUERY:
+        return new FinishedDeleteQuery(props.taskId);
+    case MESSAGE_TYPES.STATUS_INDEX_DELETED:
+        return new IndexDeletedMessage(props.taskId);
     default:
         throw new InvalidMessage('Invalid Type');
 
