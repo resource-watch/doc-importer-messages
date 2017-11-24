@@ -125,14 +125,18 @@ class WrittenDataMessage extends Message {
  */
 class PerformedDeleteQueryMessage extends Message {
 
-    constructor(taskId) {
+    constructor(taskId, props) {
         super(MESSAGE_TYPES.STATUS_PERFORMED_DELETE_QUERY, taskId);
         this.lastCheckedDate = new Date();
+        this.elasticTaskId = props.elasticTaskId;
         this.validate();
     }
 
     validate() {
         super.validate();
+        if (!this.elasticTaskId) {
+            throw new InvalidMessage('ElasticTaskId required');
+        }
     }
 
 }
@@ -210,7 +214,7 @@ function createMessage(type, props) {
     case MESSAGE_TYPES.STATUS_WRITTEN_DATA:
         return new WrittenDataMessage(props.taskId);
     case MESSAGE_TYPES.STATUS_PERFORMED_DELETE_QUERY:
-        return new PerformedDeleteQueryMessage(props.taskId);
+        return new PerformedDeleteQueryMessage(props.taskId, props);
     case MESSAGE_TYPES.STATUS_FINISHED_DELETE_QUERY:
         return new FinishedDeleteQuery(props.taskId);
     case MESSAGE_TYPES.STATUS_INDEX_DELETED:
