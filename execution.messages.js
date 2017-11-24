@@ -105,6 +105,7 @@ class DeleteMessage extends Message {
     constructor(taskId, props) {
         super(MESSAGE_TYPES.EXECUTION_DELETE, taskId);
         this.query = props.query;
+        this.index = props.index;
         this.validate();
     }
 
@@ -112,6 +113,9 @@ class DeleteMessage extends Message {
         super.validate();
         if (!this.query) {
             throw new InvalidMessage('Query required');
+        }
+        if (!this.index) {
+            throw new InvalidMessage('Index required');
         }
     }
 
