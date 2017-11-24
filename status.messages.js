@@ -45,13 +45,17 @@ class Message {
  */
 class IndexCreatedMessage extends Message {
 
-    constructor(taskId) {
+    constructor(taskId, props) {
         super(MESSAGE_TYPES.STATUS_INDEX_CREATED, taskId);
+        this.index = props.index;
         this.validate();
     }
 
     validate() {
         super.validate();
+        if (!this.index) {
+            throw new InvalidMessage('Index required');
+        }
     }
 
 }
@@ -198,7 +202,7 @@ function createMessage(type, props) {
     switch (type) {
 
     case MESSAGE_TYPES.STATUS_INDEX_CREATED:
-        return new IndexCreatedMessage(props.taskId);
+        return new IndexCreatedMessage(props.taskId, props);
     case MESSAGE_TYPES.STATUS_READ_DATA:
         return new ReadDataMessage(props.taskId);
     case MESSAGE_TYPES.STATUS_READ_FILE:
