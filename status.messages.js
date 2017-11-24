@@ -9,7 +9,8 @@ const MESSAGE_TYPES = {
     STATUS_PERFORMED_DELETE_QUERY: 'STATUS_PERFORMED_DELETE_QUERY',
     STATUS_FINISHED_DELETE_QUERY: 'STATUS_FINISHED_DELETE_QUERY',
     STATUS_INDEX_DELETED: 'STATUS_INDEX_DELETED',
-    STATUS_IMPORT_CONFIRMED: 'STATUS_IMPORT_CONFIRMED'
+    STATUS_IMPORT_CONFIRMED: 'STATUS_IMPORT_CONFIRMED',
+    STATUS_ERROR: 'STATUS_ERROR'
 };
 
 /**
@@ -201,6 +202,25 @@ class ImportConfirmedMessage extends Message {
 
 }
 
+/**
+ * Represents a ErrorMessage.
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ */
+class ErrorMessage extends Message {
+
+    constructor(taskId, props) {
+        super(MESSAGE_TYPES.STATUS_ERROR, taskId);
+        this.error = props.error;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+    }
+
+}
+
 function createMessage(type, props) {
 
     switch (type) {
@@ -221,6 +241,8 @@ function createMessage(type, props) {
         return new IndexDeletedMessage(props.taskId);
     case MESSAGE_TYPES.STATUS_IMPORT_CONFIRMED:
         return new ImportConfirmedMessage(props.taskId);
+    case MESSAGE_TYPES.STATUS_ERROR:
+        return new ErrorMessage(props.taskId, props);
     default:
         throw new InvalidMessage('Invalid Type');
 
