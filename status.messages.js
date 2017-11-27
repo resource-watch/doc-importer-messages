@@ -8,6 +8,8 @@ const MESSAGE_TYPES = {
     STATUS_WRITTEN_DATA: 'STATUS_WRITTEN_DATA',
     STATUS_PERFORMED_DELETE_QUERY: 'STATUS_PERFORMED_DELETE_QUERY',
     STATUS_FINISHED_DELETE_QUERY: 'STATUS_FINISHED_DELETE_QUERY',
+    STATUS_PERFORMED_REINDEX: 'STATUS_PERFORMED_REINDEX',
+    STATUS_FINISHED_REINDEX: 'STATUS_FINISHED_REINDEX',
     STATUS_INDEX_DELETED: 'STATUS_INDEX_DELETED',
     STATUS_IMPORT_CONFIRMED: 'STATUS_IMPORT_CONFIRMED',
     STATUS_ERROR: 'STATUS_ERROR'
@@ -163,6 +165,50 @@ class FinishedDeleteQuery extends Message {
 }
 
 /**
+ * Represents a PerformedReindexMessage.
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ * @param {string} props - The props of the message.
+ */
+class PerformedReindexMessage extends Message {
+
+    constructor(taskId, props) {
+        super(MESSAGE_TYPES.STATUS_PERFORMED_REINDEX, taskId);
+        this.lastCheckedDate = new Date();
+        this.elasticTaskId = props.elasticTaskId;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.elasticTaskId) {
+            throw new InvalidMessage('ElasticTaskId required');
+        }
+    }
+
+}
+
+/**
+ * Represents a FinishedReindex.
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ * @param {string} props - The props of the message.
+ */
+class FinishedReindex extends Message {
+
+    constructor(taskId) {
+        super(MESSAGE_TYPES.STATUS_FINISHED_REINDEX, taskId);
+        this.lastCheckedDate = new Date();
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+    }
+
+}
+
+/**
  * Represents a CheckDeleteMessage.
  * @constructor
  * @param {string} type - The type of the message.
@@ -237,6 +283,10 @@ function createMessage(type, props) {
         return new PerformedDeleteQueryMessage(props.taskId, props);
     case MESSAGE_TYPES.STATUS_FINISHED_DELETE_QUERY:
         return new FinishedDeleteQuery(props.taskId);
+    case MESSAGE_TYPES.STATUS_PERFORMED_REINDEX:
+        return new PerformedReindexMessage(props.taskId, props);
+    case MESSAGE_TYPES.STATUS_FINISHED_REINDEX:
+        return new FinishedReindex(props.taskId);
     case MESSAGE_TYPES.STATUS_INDEX_DELETED:
         return new IndexDeletedMessage(props.taskId);
     case MESSAGE_TYPES.STATUS_IMPORT_CONFIRMED:
