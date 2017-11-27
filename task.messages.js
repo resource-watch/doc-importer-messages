@@ -144,6 +144,7 @@ class DeleteMessage extends Message {
         super(MESSAGE_TYPES.TASK_DELETE);
         this.query = props.query;
         this.index = props.index;
+        this.datasetId = props.datasetId;
         this.validate();
     }
 
@@ -170,12 +171,16 @@ class DeleteIndexMessage extends Message {
     constructor(props) {
         super(MESSAGE_TYPES.TASK_DELETE_INDEX);
         this.index = props.index;
+        this.datasetId = props.datasetId;
         this.validate();
     }
 
     validate() {
         super.validate();
         if (!this.index) {
+            throw new InvalidMessage('Index required');
+        }
+        if (!this.datasetId) {
             throw new InvalidMessage('Index required');
         }
         return true;
