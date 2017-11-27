@@ -60,7 +60,7 @@ function createMessage(type, props) {
     switch (type) {
 
     case MESSAGE_TYPES.DATA:
-        return new DataMessage(props);
+        return new DataMessage(props.taskId, props);
     default:
         throw new InvalidMessage('Invalid Type');
 
