@@ -7,7 +7,9 @@ const MESSAGE_TYPES = {
     EXECUTION_DELETE: 'EXECUTION_DELETE',
     EXECUTION_CONFIRM_DELETE: 'EXECUTION_CONFIRM_DELETE',
     EXECUTION_DELETE_INDEX: 'EXECUTION_DELETE_INDEX',
-    EXECUTION_CONFIRM_IMPORT: 'EXECUTION_CONFIRM_IMPORT'
+    EXECUTION_CONFIRM_IMPORT: 'EXECUTION_CONFIRM_IMPORT',
+    EXECUTION_REINDEX: 'EXECUTION_REINDEX',
+    EXECUTION_CONFIRM_REINDEX: 'EXECUTION_CONFIRM_REINDEX'
 };
 
 /**
@@ -61,6 +63,56 @@ class CreateMessage extends Message {
     }
 
 }
+
+/**
+ * Represents a ReIndexMessage.
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ * @param {object} props - The props of the message.
+ */
+class ReIndexMessage extends Message {
+
+    constructor(taskId, props) {
+        super(MESSAGE_TYPES.EXECUTION_CONFIRM_REINDEX, taskId);
+        this.sourceIndex = props.sourceIndex;
+        this.targetIndex = props.targetIndex;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.sourceIndex) {
+            throw new Error('sourceIndex required');
+        }
+        if (!this.targetIndex) {
+            throw new Error('targetIndex required');
+        }
+    }
+
+}
+
+/**
+ * Represents a ConfirmReIndexMessage.
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ * @param {object} props - The props of the message.
+ */
+class ConfirmReIndexMessage extends Message {
+    
+    constructor(taskId, props) {
+        super(MESSAGE_TYPES.EXECUTION_CONFIRM_REINDEX, taskId);
+        this.elasticTaskId = props.elasticTaskId;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.elasticTaskId) {
+            throw new InvalidMessage('ElasticTaskId required');
+        }
+    }
+    
+    }
 
 
 /**
@@ -195,20 +247,24 @@ function createMessage(type, props) {
 
     switch (type) {
 
-    case MESSAGE_TYPES.EXECUTION_CREATE:
-        return new CreateMessage(props.taskId, props);
-    case MESSAGE_TYPES.EXECUTION_CONCAT:
-        return new ConcatMessage(props.taskId, props);
-    case MESSAGE_TYPES.EXECUTION_DELETE:
-        return new DeleteMessage(props.taskId, props);
-    case MESSAGE_TYPES.EXECUTION_CONFIRM_DELETE:
-        return new ConfirmDeleteMessage(props.taskId, props);
-    case MESSAGE_TYPES.EXECUTION_DELETE_INDEX:
-        return new DeleteIndexMessage(props.taskId, props);
-    case MESSAGE_TYPES.EXECUTION_CONFIRM_IMPORT:
-        return new ConfirmImportMessage(props.taskId, props);
-    default:
-        throw new InvalidMessage('Invalid Type');
+        case MESSAGE_TYPES.EXECUTION_CREATE:
+            return new CreateMessage(props.taskId, props);
+        case MESSAGE_TYPES.EXECUTION_CONCAT:
+            return new ConcatMessage(props.taskId, props);
+        case MESSAGE_TYPES.EXECUTION_DELETE:
+            return new DeleteMessage(props.taskId, props);
+        case MESSAGE_TYPES.EXECUTION_CONFIRM_DELETE:
+            return new ConfirmDeleteMessage(props.taskId, props);
+        case MESSAGE_TYPES.EXECUTION_DELETE_INDEX:
+            return new DeleteIndexMessage(props.taskId, props);
+        case MESSAGE_TYPES.EXECUTION_CONFIRM_IMPORT:
+            return new ConfirmImportMessage(props.taskId, props);
+        case MESSAGE_TYPES.EXECUTION_CONFIRM_REINDEX:
+            return new ConfirmReIndexMessage(props.taskId, props);
+        case MESSAGE_TYPES.EXECUTION_REINDEX:
+            return new ReIndexMessage(props.taskId, props);
+        default:
+            throw new InvalidMessage('Invalid Type');
 
     }
 
