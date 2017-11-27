@@ -42,6 +42,7 @@ class DataMessage extends Message {
     constructor(taskId, props) {
         super(MESSAGE_TYPES.DATA, taskId);
         this.data = props.data;
+        this.index = props.index;
         this.validate();
     }
 
@@ -49,6 +50,9 @@ class DataMessage extends Message {
         super.validate();
         if (!this.data) {
             throw new InvalidMessage('Empty data prop');
+        }
+        if (!this.index) {
+            throw new InvalidMessage('Empty index prop');
         }
     }
 
