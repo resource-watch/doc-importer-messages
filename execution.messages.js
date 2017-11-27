@@ -73,7 +73,7 @@ class CreateMessage extends Message {
 class ReIndexMessage extends Message {
 
     constructor(taskId, props) {
-        super(MESSAGE_TYPES.EXECUTION_CONFIRM_REINDEX, taskId);
+        super(MESSAGE_TYPES.EXECUTION_REINDEX, taskId);
         this.sourceIndex = props.sourceIndex;
         this.targetIndex = props.targetIndex;
         this.validate();
