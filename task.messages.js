@@ -43,6 +43,8 @@ class CreateMessage extends Message {
         this.data = props.data;
         this.provider = props.provider;
         this.legend = props.legend;
+        this.verified = props.verified;
+        this.dataPath = props.dataPath;
         this.validate();
     }
 
@@ -75,6 +77,8 @@ class ConcatMessage extends Message {
         this.data = props.data;
         this.provider = props.provider;
         this.legend = props.legend;
+        this.verified = props.verified;
+        this.dataPath = props.dataPath;
         this.index = props.index;
         this.validate();
     }
@@ -111,6 +115,8 @@ class OverwriteMessage extends Message {
         this.data = props.data;
         this.provider = props.provider;
         this.legend = props.legend;
+        this.verified = props.verified;
+        this.dataPath = props.dataPath;
         this.index = props.index;
         this.validate();
     }
