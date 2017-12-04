@@ -47,11 +47,13 @@ class CreateMessage extends Message {
 
     constructor(taskId, props) {
         super(MESSAGE_TYPES.EXECUTION_CREATE, taskId);
+        this.datasetId = props.datasetId;
         this.fileUrl = props.fileUrl;
         this.data = props.data;
-        this.legend = props.legend;
         this.provider = props.provider;
-        this.datasetId = props.datasetId;
+        this.legend = props.legend;
+        this.verified = props.verified;
+        this.dataPath = props.dataPath;
         this.validate();
     }
 
@@ -59,6 +61,12 @@ class CreateMessage extends Message {
         super.validate();
         if (!this.datasetId) {
             throw new Error('datasetId required');
+        }
+        if (!this.provider) {
+            throw new InvalidMessage('Provider is required');
+        }
+        if (!this.fileUrl && !this.data) {
+            throw new InvalidMessage('Data or fileUrl is required');
         }
     }
 
@@ -98,7 +106,7 @@ class ReIndexMessage extends Message {
  * @param {object} props - The props of the message.
  */
 class ConfirmReIndexMessage extends Message {
-    
+
     constructor(taskId, props) {
         super(MESSAGE_TYPES.EXECUTION_CONFIRM_REINDEX, taskId);
         this.elasticTaskId = props.elasticTaskId;
@@ -111,8 +119,8 @@ class ConfirmReIndexMessage extends Message {
             throw new InvalidMessage('ElasticTaskId required');
         }
     }
-    
-    }
+
+}
 
 
 /**
@@ -125,11 +133,13 @@ class ConcatMessage extends Message {
 
     constructor(taskId, props) {
         super(MESSAGE_TYPES.EXECUTION_CONCAT, taskId);
+        this.datasetId = props.datasetId;
         this.fileUrl = props.fileUrl;
         this.data = props.data;
-        this.legend = props.legend;
         this.provider = props.provider;
-        this.datasetId = props.datasetId;
+        this.legend = props.legend;
+        this.verified = props.verified;
+        this.dataPath = props.dataPath;
         this.index = props.index;
         this.validate();
     }
@@ -137,10 +147,16 @@ class ConcatMessage extends Message {
     validate() {
         super.validate();
         if (!this.datasetId) {
-            throw new InvalidMessage('DatasetId required');
+            throw new InvalidMessage('DatasetId is required');
         }
         if (!this.index) {
-            throw new InvalidMessage('Index required');
+            throw new InvalidMessage('Index is required');
+        }
+        if (!this.provider) {
+            throw new InvalidMessage('Provider is required');
+        }
+        if (!this.fileUrl && !this.data) {
+            throw new InvalidMessage('Data or fileUrl is required');
         }
     }
 
