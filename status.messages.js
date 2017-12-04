@@ -109,8 +109,10 @@ class ReadFileMessage extends Message {
  */
 class WrittenDataMessage extends Message {
 
-    constructor(taskId) {
+    constructor(taskId, props) {
         super(MESSAGE_TYPES.STATUS_WRITTEN_DATA, taskId);
+        this.withErrors = props.withErrors;
+        this.detail = props.detail;
         this.validate();
     }
 
@@ -278,7 +280,7 @@ function createMessage(type, props) {
     case MESSAGE_TYPES.STATUS_READ_FILE:
         return new ReadFileMessage(props.taskId);
     case MESSAGE_TYPES.STATUS_WRITTEN_DATA:
-        return new WrittenDataMessage(props.taskId);
+        return new WrittenDataMessage(props.taskId, props);
     case MESSAGE_TYPES.STATUS_PERFORMED_DELETE_QUERY:
         return new PerformedDeleteQueryMessage(props.taskId, props);
     case MESSAGE_TYPES.STATUS_FINISHED_DELETE_QUERY:
