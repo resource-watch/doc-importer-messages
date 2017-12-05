@@ -263,24 +263,24 @@ function createMessage(type, props) {
 
     switch (type) {
 
-        case MESSAGE_TYPES.EXECUTION_CREATE:
-            return new CreateMessage(props.taskId, props);
-        case MESSAGE_TYPES.EXECUTION_CONCAT:
-            return new ConcatMessage(props.taskId, props);
-        case MESSAGE_TYPES.EXECUTION_DELETE:
-            return new DeleteMessage(props.taskId, props);
-        case MESSAGE_TYPES.EXECUTION_CONFIRM_DELETE:
-            return new ConfirmDeleteMessage(props.taskId, props);
-        case MESSAGE_TYPES.EXECUTION_DELETE_INDEX:
-            return new DeleteIndexMessage(props.taskId, props);
-        case MESSAGE_TYPES.EXECUTION_CONFIRM_IMPORT:
-            return new ConfirmImportMessage(props.taskId, props);
-        case MESSAGE_TYPES.EXECUTION_CONFIRM_REINDEX:
-            return new ConfirmReIndexMessage(props.taskId, props);
-        case MESSAGE_TYPES.EXECUTION_REINDEX:
-            return new ReIndexMessage(props.taskId, props);
-        default:
-            throw new InvalidMessage('Invalid Type');
+    case MESSAGE_TYPES.EXECUTION_CREATE:
+        return new CreateMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_CONCAT:
+        return new ConcatMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_DELETE:
+        return new DeleteMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_CONFIRM_DELETE:
+        return new ConfirmDeleteMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_DELETE_INDEX:
+        return new DeleteIndexMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_CONFIRM_IMPORT:
+        return new ConfirmImportMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_CONFIRM_REINDEX:
+        return new ConfirmReIndexMessage(props.taskId, props);
+    case MESSAGE_TYPES.EXECUTION_REINDEX:
+        return new ReIndexMessage(props.taskId, props);
+    default:
+        throw new InvalidMessage('Invalid Type');
 
     }
 
