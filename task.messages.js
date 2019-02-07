@@ -187,7 +187,7 @@ class DeleteIndexMessage extends Message {
             throw new InvalidMessage('Index required');
         }
         if (!this.datasetId) {
-            throw new InvalidMessage('Index required');
+            throw new InvalidMessage('Dataset ID required');
         }
         return true;
     }
