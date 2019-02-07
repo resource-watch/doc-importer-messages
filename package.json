@@ -1,7 +1,7 @@
 {
   "name": "doc-importer-messages",
   "version": "1.0.0",
-  "description": "",
+  "description": "Shared message structs for the Resource Watch API",
   "main": "index.js",
   "scripts": {
     "test": "node test.js",
@@ -17,7 +17,7 @@
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-jsx-a11y": "^1.5.3",
     "eslint-plugin-react": "^5.2.2",
-    "mocha": "^3.2.0",
+    "mocha": "^5.2.0",
     "should": "^11.2.1",
     "nock": "^9.0.2",
     "nodemon": "^1.12.1"
