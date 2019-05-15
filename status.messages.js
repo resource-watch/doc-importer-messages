@@ -3,6 +3,7 @@ const InvalidMessage = require('./invalid-message.error');
 
 const MESSAGE_TYPES = {
     STATUS_INDEX_CREATED: 'STATUS_INDEX_CREATED',
+    STATUS_INDEX_DEACTIVATED: 'STATUS_INDEX_DEACTIVATED',
     STATUS_READ_DATA: 'STATUS_READ_DATA',
     STATUS_BLOCKCHAIN_GENERATED: 'STATUS_BLOCKCHAIN_GENERATED',
     STATUS_READ_FILE: 'STATUS_READ_FILE',
@@ -51,6 +52,29 @@ class IndexCreatedMessage extends Message {
 
     constructor(taskId, props) {
         super(MESSAGE_TYPES.STATUS_INDEX_CREATED, taskId);
+        this.index = props.index;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.index) {
+            throw new InvalidMessage('Index required');
+        }
+    }
+
+}
+
+/**
+ * Represents a ReadMessage.
+ * @constructor
+ * @param {string} type - The type of the message.
+ * @param {string} taskId - The taskId of the message.
+ */
+class IndexDeactivatedMessage extends Message {
+
+    constructor(taskId, props) {
+        super(MESSAGE_TYPES.STATUS_INDEX_DEACTIVATED, taskId);
         this.index = props.index;
         this.validate();
     }
@@ -299,6 +323,8 @@ function createMessage(type, props) {
 
     case MESSAGE_TYPES.STATUS_INDEX_CREATED:
         return new IndexCreatedMessage(props.taskId, props);
+    case MESSAGE_TYPES.STATUS_INDEX_DEACTIVATED:
+        return new IndexDeactivatedMessage(props.taskId, props);
     case MESSAGE_TYPES.STATUS_READ_DATA:
         return new ReadDataMessage(props.taskId);
     case MESSAGE_TYPES.STATUS_BLOCKCHAIN_GENERATED:
