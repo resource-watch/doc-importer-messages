@@ -1,3 +1,8 @@
+# 1.2.0
+- Restore `EXECUTION_CONFIRM_REINDEX` message.
+- Restore `STATUS_FINISHED_REINDEX` message.
+- Restore `elasticTaskId` and remove`reindexResult` in `STATUS_PERFORMED_REINDEX` message.
+
 # 1.1.0
 - Add `.idea` to ignored files.
 - Remove `EXECUTION_CONFIRM_REINDEX` message.
