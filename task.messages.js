@@ -198,18 +198,18 @@ function createMessage(type, props) {
 
     switch (type) {
 
-    case MESSAGE_TYPES.TASK_CREATE:
-        return new CreateMessage(props);
-    case MESSAGE_TYPES.TASK_CONCAT:
-        return new ConcatMessage(props);
-    case MESSAGE_TYPES.TASK_OVERWRITE:
-        return new OverwriteMessage(props);
-    case MESSAGE_TYPES.TASK_DELETE:
-        return new DeleteMessage(props);
-    case MESSAGE_TYPES.TASK_DELETE_INDEX:
-        return new DeleteIndexMessage(props);
-    default:
-        throw new InvalidMessage('Invalid Type');
+        case MESSAGE_TYPES.TASK_CREATE:
+            return new CreateMessage(props);
+        case MESSAGE_TYPES.TASK_CONCAT:
+            return new ConcatMessage(props);
+        case MESSAGE_TYPES.TASK_OVERWRITE:
+            return new OverwriteMessage(props);
+        case MESSAGE_TYPES.TASK_DELETE:
+            return new DeleteMessage(props);
+        case MESSAGE_TYPES.TASK_DELETE_INDEX:
+            return new DeleteIndexMessage(props);
+        default:
+            throw new InvalidMessage('Invalid Type');
 
     }
 

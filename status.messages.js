@@ -11,6 +11,7 @@ const MESSAGE_TYPES = {
     STATUS_PERFORMED_DELETE_QUERY: 'STATUS_PERFORMED_DELETE_QUERY',
     STATUS_FINISHED_DELETE_QUERY: 'STATUS_FINISHED_DELETE_QUERY',
     STATUS_PERFORMED_REINDEX: 'STATUS_PERFORMED_REINDEX',
+    STATUS_FINISHED_REINDEX: 'STATUS_FINISHED_REINDEX',
     STATUS_INDEX_DELETED: 'STATUS_INDEX_DELETED',
     STATUS_IMPORT_CONFIRMED: 'STATUS_IMPORT_CONFIRMED',
     STATUS_ERROR: 'STATUS_ERROR'
@@ -228,19 +229,38 @@ class PerformedReindexMessage extends Message {
     constructor(taskId, props) {
         super(MESSAGE_TYPES.STATUS_PERFORMED_REINDEX, taskId);
         this.lastCheckedDate = new Date();
-        this.reindexResult = props.reindexResult;
+        this.elasticTaskId = props.elasticTaskId;
         this.validate();
     }
 
     validate() {
         super.validate();
-        if (!this.reindexResult) {
-            throw new InvalidMessage('Reindex result required');
+        if (!this.elasticTaskId) {
+            throw new InvalidMessage('ElasticTaskId required');
         }
     }
 
 }
 
+/**
+ * Represents a FinishedReindex.
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ * @param {string} props - The props of the message.
+ */
+class FinishedReindex extends Message {
+
+    constructor(taskId) {
+        super(MESSAGE_TYPES.STATUS_FINISHED_REINDEX, taskId);
+        this.lastCheckedDate = new Date();
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+    }
+
+}
 
 /**
  * Represents a CheckDeleteMessage.
@@ -305,32 +325,34 @@ function createMessage(type, props) {
 
     switch (type) {
 
-    case MESSAGE_TYPES.STATUS_INDEX_CREATED:
-        return new IndexCreatedMessage(props.taskId, props);
-    case MESSAGE_TYPES.STATUS_INDEX_DEACTIVATED:
-        return new IndexDeactivatedMessage(props.taskId, props);
-    case MESSAGE_TYPES.STATUS_READ_DATA:
-        return new ReadDataMessage(props.taskId);
-    case MESSAGE_TYPES.STATUS_BLOCKCHAIN_GENERATED:
-        return new BlockChainGeneratedMessage(props.taskId, props);
-    case MESSAGE_TYPES.STATUS_READ_FILE:
-        return new ReadFileMessage(props.taskId);
-    case MESSAGE_TYPES.STATUS_WRITTEN_DATA:
-        return new WrittenDataMessage(props.taskId, props);
-    case MESSAGE_TYPES.STATUS_PERFORMED_DELETE_QUERY:
-        return new PerformedDeleteQueryMessage(props.taskId, props);
-    case MESSAGE_TYPES.STATUS_FINISHED_DELETE_QUERY:
-        return new FinishedDeleteQuery(props.taskId);
-    case MESSAGE_TYPES.STATUS_PERFORMED_REINDEX:
-        return new PerformedReindexMessage(props.taskId, props);
-    case MESSAGE_TYPES.STATUS_INDEX_DELETED:
-        return new IndexDeletedMessage(props.taskId);
-    case MESSAGE_TYPES.STATUS_IMPORT_CONFIRMED:
-        return new ImportConfirmedMessage(props.taskId, props);
-    case MESSAGE_TYPES.STATUS_ERROR:
-        return new ErrorMessage(props.taskId, props);
-    default:
-        throw new InvalidMessage('Invalid Type');
+        case MESSAGE_TYPES.STATUS_INDEX_CREATED:
+            return new IndexCreatedMessage(props.taskId, props);
+        case MESSAGE_TYPES.STATUS_INDEX_DEACTIVATED:
+            return new IndexDeactivatedMessage(props.taskId, props);
+        case MESSAGE_TYPES.STATUS_READ_DATA:
+            return new ReadDataMessage(props.taskId);
+        case MESSAGE_TYPES.STATUS_BLOCKCHAIN_GENERATED:
+            return new BlockChainGeneratedMessage(props.taskId, props);
+        case MESSAGE_TYPES.STATUS_READ_FILE:
+            return new ReadFileMessage(props.taskId);
+        case MESSAGE_TYPES.STATUS_WRITTEN_DATA:
+            return new WrittenDataMessage(props.taskId, props);
+        case MESSAGE_TYPES.STATUS_PERFORMED_DELETE_QUERY:
+            return new PerformedDeleteQueryMessage(props.taskId, props);
+        case MESSAGE_TYPES.STATUS_FINISHED_DELETE_QUERY:
+            return new FinishedDeleteQuery(props.taskId);
+        case MESSAGE_TYPES.STATUS_PERFORMED_REINDEX:
+            return new PerformedReindexMessage(props.taskId, props);
+        case MESSAGE_TYPES.STATUS_FINISHED_REINDEX:
+            return new FinishedReindex(props.taskId);
+        case MESSAGE_TYPES.STATUS_INDEX_DELETED:
+            return new IndexDeletedMessage(props.taskId);
+        case MESSAGE_TYPES.STATUS_IMPORT_CONFIRMED:
+            return new ImportConfirmedMessage(props.taskId);
+        case MESSAGE_TYPES.STATUS_ERROR:
+            return new ErrorMessage(props.taskId, props);
+        default:
+            throw new InvalidMessage('Invalid Type');
 
     }
 
