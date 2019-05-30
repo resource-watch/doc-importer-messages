@@ -4,6 +4,7 @@ const InvalidMessage = require('./invalid-message.error');
 const MESSAGE_TYPES = {
     EXECUTION_CREATE: 'EXECUTION_CREATE',
     EXECUTION_CONCAT: 'EXECUTION_CONCAT',
+    EXECUTION_APPEND: 'EXECUTION_APPEND',
     EXECUTION_DELETE: 'EXECUTION_DELETE',
     EXECUTION_CONFIRM_DELETE: 'EXECUTION_CONFIRM_DELETE',
     EXECUTION_DELETE_INDEX: 'EXECUTION_DELETE_INDEX',
@@ -162,6 +163,46 @@ class ConcatMessage extends Message {
 
 }
 
+
+/**
+ * Represents a AppendMessage.
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ * @param {object} props - The props of the message.
+ */
+class AppendMessage extends Message {
+
+    constructor(taskId, props) {
+        super(MESSAGE_TYPES.EXECUTION_APPEND, taskId);
+        this.datasetId = props.datasetId;
+        this.fileUrl = props.fileUrl;
+        this.data = props.data;
+        this.provider = props.provider;
+        this.legend = props.legend;
+        this.verified = props.verified;
+        this.dataPath = props.dataPath;
+        this.index = props.index;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.datasetId) {
+            throw new InvalidMessage('DatasetId is required');
+        }
+        if (!this.index) {
+            throw new InvalidMessage('Index is required');
+        }
+        if (!this.provider) {
+            throw new InvalidMessage('Provider is required');
+        }
+        if (!this.fileUrl && !this.data) {
+            throw new InvalidMessage('Data or fileUrl is required');
+        }
+    }
+
+}
+
 /**
  * Represents a DeleteMessage.
  * @constructor
@@ -267,6 +308,8 @@ function createMessage(type, props) {
             return new CreateMessage(props.taskId, props);
         case MESSAGE_TYPES.EXECUTION_CONCAT:
             return new ConcatMessage(props.taskId, props);
+        case MESSAGE_TYPES.EXECUTION_APPEND:
+            return new AppendMessage(props.taskId, props);
         case MESSAGE_TYPES.EXECUTION_DELETE:
             return new DeleteMessage(props.taskId, props);
         case MESSAGE_TYPES.EXECUTION_CONFIRM_DELETE:

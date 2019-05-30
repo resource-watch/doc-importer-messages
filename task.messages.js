@@ -4,6 +4,7 @@ const InvalidMessage = require('./invalid-message.error');
 const MESSAGE_TYPES = {
     TASK_CREATE: 'TASK_CREATE',
     TASK_CONCAT: 'TASK_CONCAT',
+    TASK_APPEND: 'TASK_APPEND',
     TASK_OVERWRITE: 'TASK_OVERWRITE',
     TASK_DELETE: 'TASK_DELETE',
     TASK_DELETE_INDEX: 'TASK_DELETE_INDEX'
@@ -72,6 +73,45 @@ class ConcatMessage extends Message {
 
     constructor(props) {
         super(MESSAGE_TYPES.TASK_CONCAT);
+        this.datasetId = props.datasetId;
+        this.fileUrl = props.fileUrl;
+        this.data = props.data;
+        this.provider = props.provider;
+        this.legend = props.legend;
+        this.verified = props.verified;
+        this.dataPath = props.dataPath;
+        this.index = props.index;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.datasetId) {
+            throw new InvalidMessage('DatasetId is required');
+        }
+        if (!this.index) {
+            throw new InvalidMessage('Index is required');
+        }
+        if (!this.provider) {
+            throw new InvalidMessage('Provider is required');
+        }
+        if (!this.fileUrl && !this.data) {
+            throw new InvalidMessage('Data or fileUrl is required');
+        }
+    }
+
+}
+
+
+/**
+ * Represents a AppendMessage.
+ * @constructor
+ * @param {string} props - The props of the message.
+ */
+class AppendMessage extends Message {
+
+    constructor(props) {
+        super(MESSAGE_TYPES.TASK_APPEND);
         this.datasetId = props.datasetId;
         this.fileUrl = props.fileUrl;
         this.data = props.data;
@@ -202,6 +242,8 @@ function createMessage(type, props) {
             return new CreateMessage(props);
         case MESSAGE_TYPES.TASK_CONCAT:
             return new ConcatMessage(props);
+        case MESSAGE_TYPES.TASK_APPEND:
+            return new AppendMessage(props);
         case MESSAGE_TYPES.TASK_OVERWRITE:
             return new OverwriteMessage(props);
         case MESSAGE_TYPES.TASK_DELETE:

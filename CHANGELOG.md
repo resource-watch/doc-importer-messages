@@ -1,3 +1,6 @@
+# 1.2.1
+- Add `TASK_APPEND` and `EXECUTION_APPEND` messages.
+
 # 1.2.0
 - Restore `EXECUTION_CONFIRM_REINDEX` message.
 - Restore `STATUS_FINISHED_REINDEX` message.
