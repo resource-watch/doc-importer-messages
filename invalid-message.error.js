@@ -1,4 +1,3 @@
-
 class InvalidMessage extends Error {
 
     constructor(messages) {
