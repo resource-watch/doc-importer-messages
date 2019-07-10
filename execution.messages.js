@@ -10,7 +10,8 @@ const MESSAGE_TYPES = {
     EXECUTION_DELETE_INDEX: 'EXECUTION_DELETE_INDEX',
     EXECUTION_CONFIRM_IMPORT: 'EXECUTION_CONFIRM_IMPORT',
     EXECUTION_REINDEX: 'EXECUTION_REINDEX',
-    EXECUTION_CONFIRM_REINDEX: 'EXECUTION_CONFIRM_REINDEX'
+    EXECUTION_CONFIRM_REINDEX: 'EXECUTION_CONFIRM_REINDEX',
+    EXECUTION_READ_FILE: 'EXECUTION_READ_FILE'
 };
 
 /**
@@ -299,6 +300,42 @@ class ConfirmImportMessage extends Message {
 
 }
 
+/**
+ * Represents a ReadFileMessage.
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ * @param {object} props - The props of the message.
+ */
+class ReadFileMessage extends Message {
+
+    constructor(taskId, props) {
+        super(MESSAGE_TYPES.EXECUTION_READ_FILE, taskId);
+        this.fileUrl = props.fileUrl;
+        this.provider = props.provider;
+        this.dataPath = props.dataPath;
+        this.index = props.index;
+        this.datasetId = props.datasetId;
+        this.data = props.data;
+        this.legend = props.legend;
+        this.verified = props.verified;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.fileUrl && !this.data) {
+            throw new InvalidMessage('Data or file URL is required');
+        }
+        if (!this.provider) {
+            throw new InvalidMessage('Provider is required');
+        }
+        if (!this.index) {
+            throw new InvalidMessage('Empty index prop');
+        }
+    }
+
+}
+
 
 function createMessage(type, props) {
 
@@ -322,6 +359,8 @@ function createMessage(type, props) {
             return new ConfirmReIndexMessage(props.taskId, props);
         case MESSAGE_TYPES.EXECUTION_REINDEX:
             return new ReIndexMessage(props.taskId, props);
+        case MESSAGE_TYPES.EXECUTION_READ_FILE:
+            return new ReadFileMessage(props.taskId, props);
         default:
             throw new InvalidMessage('Invalid Type');
 
