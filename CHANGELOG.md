@@ -1,3 +1,6 @@
+# 1.2.2
+- Add `EXECUTION_READ_FILE` message.
+
 # 1.2.1
 - Add `TASK_APPEND` and `EXECUTION_APPEND` messages.
 
