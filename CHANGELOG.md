@@ -1,3 +1,6 @@
+# 1.3.0
+- Add `fileCount` to `EXECUTION_CONFIRM_REINDEX` message.
+
 # 1.2.2
 - Add `EXECUTION_READ_FILE` message.
 

@@ -112,6 +112,7 @@ class ConfirmReIndexMessage extends Message {
     constructor(taskId, props) {
         super(MESSAGE_TYPES.EXECUTION_CONFIRM_REINDEX, taskId);
         this.elasticTaskId = props.elasticTaskId;
+        this.fileCount = props.fileCount;
         this.validate();
     }
 
@@ -119,6 +120,9 @@ class ConfirmReIndexMessage extends Message {
         super.validate();
         if (!this.elasticTaskId) {
             throw new InvalidMessage('ElasticTaskId required');
+        }
+        if (!this.fileCount) {
+            throw new InvalidMessage('fileCount required');
         }
     }
 
