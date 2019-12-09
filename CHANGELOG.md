@@ -1,3 +1,7 @@
+# 1.3.1
+- Replace `npm` with `yarn`
+- Add repository link to `package.json`
+
 # 1.3.0
 - Add `fileCount` to `EXECUTION_CONFIRM_REINDEX` message.
 - Update develop dependencies.

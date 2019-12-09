@@ -9,6 +9,10 @@
   },
   "author": "Vizzuality",
   "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/resource-watch/doc-importer-messages.git"
+  },
   "devDependencies": {
     "assert": "^2.0.0",
     "babel-eslint": "^10.0.3",
