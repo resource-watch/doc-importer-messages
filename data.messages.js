@@ -6,7 +6,9 @@ const MESSAGE_TYPES = {
 };
 
 /**
- * Represents a Message.
+ * Represents a generic message.
+ * It acts as a class template for other classes, and most likely should not be instantiated directly.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -32,6 +34,8 @@ class Message {
 
 /**
  * Represents a DataMessage.
+ * Contains the actual data to be imported into an Elasticsearch index.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.

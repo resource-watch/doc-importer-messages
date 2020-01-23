@@ -1,3 +1,7 @@
+# 1.4.0
+- Remove `fileCount` from `EXECUTION_CONFIRM_REINDEX` message.
+- Add docs to messages.
+
 # 1.3.1
 - Replace `npm` with `yarn`
 - Add repository link to `package.json`

@@ -18,7 +18,9 @@ const MESSAGE_TYPES = {
 };
 
 /**
- * Represents a Message.
+ * Represents a generic message.
+ * It acts as a class template for other classes, and most likely should not be instantiated directly.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -43,7 +45,9 @@ class Message {
 }
 
 /**
- * Represents a ReadMessage.
+ * Represents a IndexCreatedMessage.
+ * Issued after a new Elasticsearch index has been created.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -66,7 +70,9 @@ class IndexCreatedMessage extends Message {
 }
 
 /**
- * Represents a ReadMessage.
+ * Represents a IndexDeactivatedMessage.
+ * Issued after an Elasticsearch index has been deactivated.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -89,7 +95,9 @@ class IndexDeactivatedMessage extends Message {
 }
 
 /**
- * Represents a WriteMessage.
+ * Represents a ReadDataMessage.
+ * Issued when a data block has been read from a file.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -108,7 +116,9 @@ class ReadDataMessage extends Message {
 }
 
 /**
- * Represents a WriteMessage.
+ * Represents a BlockChainGeneratedMessage.
+ * Issued when a blockchain signature has been generated.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -131,7 +141,10 @@ class BlockChainGeneratedMessage extends Message {
 }
 
 /**
- * Represents a WriteMessage.
+ * Represents a ReadFileMessage.
+ * Issued when a file has been fully read.
+ * Increments the task's `filesProcessed` counter.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -151,6 +164,8 @@ class ReadFileMessage extends Message {
 
 /**
  * Represents a WriteMessage.
+ * Issued when a data block has been written into an Elasticsearch index.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -175,7 +190,9 @@ class WrittenDataMessage extends Message {
 }
 
 /**
- * Represents a CheckDeleteMessage.
+ * Represents a PerformedDeleteQueryMessage.
+ * Issued when a delete query has been issued to an Elasticsearch index.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -199,12 +216,14 @@ class PerformedDeleteQueryMessage extends Message {
 }
 
 /**
- * Represents a CheckDeleteMessage.
+ * Represents a FinishedDeleteQueryMessage.
+ * Issued when a delete query to an Elasticsearch index has finished executing.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
  */
-class FinishedDeleteQuery extends Message {
+class FinishedDeleteQueryMessage extends Message {
 
     constructor(taskId) {
         super(MESSAGE_TYPES.STATUS_FINISHED_DELETE_QUERY, taskId);
@@ -220,6 +239,8 @@ class FinishedDeleteQuery extends Message {
 
 /**
  * Represents a PerformedReindexMessage.
+ * Issued when an Elasticsearch index reindex operation is triggered.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {string} props - The props of the message.
@@ -243,12 +264,14 @@ class PerformedReindexMessage extends Message {
 }
 
 /**
- * Represents a FinishedReindex.
+ * Represents a FinishedReindexMessage.
+ * Issued when an Elasticsearch reindex operation has been successfully finished.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {string} props - The props of the message.
  */
-class FinishedReindex extends Message {
+class FinishedReindexMessage extends Message {
 
     constructor(taskId) {
         super(MESSAGE_TYPES.STATUS_FINISHED_REINDEX, taskId);
@@ -263,7 +286,9 @@ class FinishedReindex extends Message {
 }
 
 /**
- * Represents a CheckDeleteMessage.
+ * Represents a IndexDeletedMessage.
+ * Issued when an Elasticsearch index has been deleted.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -283,7 +308,9 @@ class IndexDeletedMessage extends Message {
 }
 
 /**
- * Represents a CheckDeleteMessage.
+ * Represents a ImportConfirmedMessage.
+ * Issued after the Elasticsearch index reactivation has been requested.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -340,11 +367,11 @@ function createMessage(type, props) {
         case MESSAGE_TYPES.STATUS_PERFORMED_DELETE_QUERY:
             return new PerformedDeleteQueryMessage(props.taskId, props);
         case MESSAGE_TYPES.STATUS_FINISHED_DELETE_QUERY:
-            return new FinishedDeleteQuery(props.taskId);
+            return new FinishedDeleteQueryMessage(props.taskId);
         case MESSAGE_TYPES.STATUS_PERFORMED_REINDEX:
             return new PerformedReindexMessage(props.taskId, props);
         case MESSAGE_TYPES.STATUS_FINISHED_REINDEX:
-            return new FinishedReindex(props.taskId);
+            return new FinishedReindexMessage(props.taskId);
         case MESSAGE_TYPES.STATUS_INDEX_DELETED:
             return new IndexDeletedMessage(props.taskId);
         case MESSAGE_TYPES.STATUS_IMPORT_CONFIRMED:

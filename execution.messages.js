@@ -15,7 +15,9 @@ const MESSAGE_TYPES = {
 };
 
 /**
- * Represents a Message.
+ * Represents a generic message.
+ * It acts as a class template for other classes, and most likely should not be instantiated directly.
+ *
  * @constructor
  * @param {string} type - The type of the message.
  * @param {string} taskId - The taskId of the message.
@@ -41,6 +43,8 @@ class Message {
 
 /**
  * Represents a CreateMessage.
+ * Triggers the creation of a new Elasticsearch index, in a deactivated state.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
@@ -76,6 +80,8 @@ class CreateMessage extends Message {
 
 /**
  * Represents a ReIndexMessage.
+ * Triggers the reactivation (reindexing) of an Elasticsearch index.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
@@ -103,6 +109,9 @@ class ReIndexMessage extends Message {
 
 /**
  * Represents a ConfirmReIndexMessage.
+ * Issued once an ElasticSearch index has been reactivated.
+ * Causes a microservice to validate that the reindex process has finished.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
@@ -112,7 +121,6 @@ class ConfirmReIndexMessage extends Message {
     constructor(taskId, props) {
         super(MESSAGE_TYPES.EXECUTION_CONFIRM_REINDEX, taskId);
         this.elasticTaskId = props.elasticTaskId;
-        this.fileCount = props.fileCount;
         this.validate();
     }
 
@@ -121,9 +129,6 @@ class ConfirmReIndexMessage extends Message {
         if (!this.elasticTaskId) {
             throw new InvalidMessage('ElasticTaskId required');
         }
-        if (!this.fileCount) {
-            throw new InvalidMessage('fileCount required');
-        }
     }
 
 }
@@ -131,6 +136,8 @@ class ConfirmReIndexMessage extends Message {
 
 /**
  * Represents a ConcatMessage.
+ * Triggers the creation of a new Elasticsearch index, in a deactivated state, for a dataset concatenation process.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
@@ -171,6 +178,9 @@ class ConcatMessage extends Message {
 
 /**
  * Represents a AppendMessage.
+ * Issued at the beginning of a dataset append process.
+ * Deactivates the associated Elasticsearch index.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
@@ -210,6 +220,8 @@ class AppendMessage extends Message {
 
 /**
  * Represents a DeleteMessage.
+ * Issued on a delete query.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
@@ -237,6 +249,9 @@ class DeleteMessage extends Message {
 
 /**
  * Represents a ConfirmDeleteMessage.
+ * Issued when a delete query has been performed.
+ * Validates in Elasticsearch that the delete operation has been successfully concluded.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
@@ -259,7 +274,9 @@ class ConfirmDeleteMessage extends Message {
 }
 
 /**
- * Represents a ConfirmDeleteMessage.
+ * Represents a DeleteIndexMessage.
+ * Deletes an Elasticsearch index
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
@@ -282,7 +299,10 @@ class DeleteIndexMessage extends Message {
 }
 
 /**
- * Represents a ConfirmDeleteMessage.
+ * Represents a ConfirmImportMessage.
+ * Issued when all the data has been successfully imported into an Elasticsearch index.
+ * Triggers the index reactivation.
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
@@ -306,6 +326,8 @@ class ConfirmImportMessage extends Message {
 
 /**
  * Represents a ReadFileMessage.
+ * Issued once per file, it schedules the reading of the actual file per doc-executor, that will break it down into smaller pieces
+ *
  * @constructor
  * @param {string} taskId - The taskId of the message.
  * @param {object} props - The props of the message.
