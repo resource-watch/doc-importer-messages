@@ -1,3 +1,6 @@
+# 1.4.1
+- Add `hash` to `STATUS_READ_DATA` and `STATUS_WRITTEN_DATA`
+
 # 1.4.0
 - Remove `fileCount` from `EXECUTION_CONFIRM_REINDEX` message.
 - Add docs to messages.

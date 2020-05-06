@@ -104,13 +104,17 @@ class IndexDeactivatedMessage extends Message {
  */
 class ReadDataMessage extends Message {
 
-    constructor(taskId) {
+    constructor(taskId, props) {
         super(MESSAGE_TYPES.STATUS_READ_DATA, taskId);
+        this.hash = props.hash;
         this.validate();
     }
 
     validate() {
         super.validate();
+        if (!this.hash) {
+            throw new InvalidMessage('Hash required');
+        }
     }
 
 }
@@ -177,6 +181,7 @@ class WrittenDataMessage extends Message {
         this.withErrors = props.withErrors;
         this.detail = props.detail;
         this.index = props.index;
+        this.hash = props.hash;
         this.validate();
     }
 
@@ -184,6 +189,9 @@ class WrittenDataMessage extends Message {
         super.validate();
         if (!this.index) {
             throw new InvalidMessage('Index required');
+        }
+        if (!this.hash) {
+            throw new InvalidMessage('Hash required');
         }
     }
 
@@ -357,7 +365,7 @@ function createMessage(type, props) {
         case MESSAGE_TYPES.STATUS_INDEX_DEACTIVATED:
             return new IndexDeactivatedMessage(props.taskId, props);
         case MESSAGE_TYPES.STATUS_READ_DATA:
-            return new ReadDataMessage(props.taskId);
+            return new ReadDataMessage(props.taskId, props);
         case MESSAGE_TYPES.STATUS_BLOCKCHAIN_GENERATED:
             return new BlockChainGeneratedMessage(props.taskId, props);
         case MESSAGE_TYPES.STATUS_READ_FILE:
