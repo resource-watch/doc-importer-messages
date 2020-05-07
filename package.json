@@ -1,6 +1,6 @@
 {
   "name": "rw-doc-importer-messages",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Shared message structs for the Resource Watch API",
   "main": "index.js",
   "scripts": {
