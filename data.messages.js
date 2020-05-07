@@ -47,6 +47,7 @@ class DataMessage extends Message {
         super(MESSAGE_TYPES.DATA, taskId);
         this.data = props.data;
         this.index = props.index;
+        this.file = props.file;
         this.validate();
     }
 
@@ -57,6 +58,9 @@ class DataMessage extends Message {
         }
         if (!this.index) {
             throw new InvalidMessage('Empty index prop');
+        }
+        if (!this.file) {
+            throw new InvalidMessage('Empty file prop');
         }
     }
 

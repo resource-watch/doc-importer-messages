@@ -107,6 +107,7 @@ class ReadDataMessage extends Message {
     constructor(taskId, props) {
         super(MESSAGE_TYPES.STATUS_READ_DATA, taskId);
         this.hash = props.hash;
+        this.file = props.file;
         this.validate();
     }
 
@@ -114,6 +115,9 @@ class ReadDataMessage extends Message {
         super.validate();
         if (!this.hash) {
             throw new InvalidMessage('Hash required');
+        }
+        if (!this.file) {
+            throw new InvalidMessage('File required');
         }
     }
 
@@ -155,13 +159,17 @@ class BlockChainGeneratedMessage extends Message {
  */
 class ReadFileMessage extends Message {
 
-    constructor(taskId) {
+    constructor(taskId, props) {
         super(MESSAGE_TYPES.STATUS_READ_FILE, taskId);
+        this.file = props.file;
         this.validate();
     }
 
     validate() {
         super.validate();
+        if (!this.file) {
+            throw new InvalidMessage('File required');
+        }
     }
 
 }
@@ -182,6 +190,7 @@ class WrittenDataMessage extends Message {
         this.detail = props.detail;
         this.index = props.index;
         this.hash = props.hash;
+        this.file = props.file;
         this.validate();
     }
 
@@ -192,6 +201,9 @@ class WrittenDataMessage extends Message {
         }
         if (!this.hash) {
             throw new InvalidMessage('Hash required');
+        }
+        if (!this.file) {
+            throw new InvalidMessage('File required');
         }
     }
 
@@ -369,7 +381,7 @@ function createMessage(type, props) {
         case MESSAGE_TYPES.STATUS_BLOCKCHAIN_GENERATED:
             return new BlockChainGeneratedMessage(props.taskId, props);
         case MESSAGE_TYPES.STATUS_READ_FILE:
-            return new ReadFileMessage(props.taskId);
+            return new ReadFileMessage(props.taskId, props);
         case MESSAGE_TYPES.STATUS_WRITTEN_DATA:
             return new WrittenDataMessage(props.taskId, props);
         case MESSAGE_TYPES.STATUS_PERFORMED_DELETE_QUERY:
