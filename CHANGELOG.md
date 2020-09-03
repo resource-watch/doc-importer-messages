@@ -1,3 +1,6 @@
+# 1.5.0
+- Add `EXECUTION_CREATE_INDEX` and `TASK_REINDEX` message types.
+
 # 1.4.1
 - Add `hash` to `STATUS_READ_DATA` and `STATUS_WRITTEN_DATA`
 - Add `file` to `DATA`, `STATUS_WRITTEN_DATA`, `STATUS_READ_FILE` and `STATUS_READ_DATA`

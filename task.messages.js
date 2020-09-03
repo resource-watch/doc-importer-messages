@@ -5,6 +5,7 @@ const MESSAGE_TYPES = {
     TASK_CREATE: 'TASK_CREATE',
     TASK_CONCAT: 'TASK_CONCAT',
     TASK_APPEND: 'TASK_APPEND',
+    TASK_REINDEX: 'TASK_REINDEX',
     TASK_OVERWRITE: 'TASK_OVERWRITE',
     TASK_DELETE: 'TASK_DELETE',
     TASK_DELETE_INDEX: 'TASK_DELETE_INDEX'
@@ -141,6 +142,40 @@ class AppendMessage extends Message {
 
 }
 
+
+/**
+ * Represents a ReindexMessage.
+ * @constructor
+ * @param {string} props - The props of the message.
+ */
+class ReindexMessage extends Message {
+
+    constructor(props) {
+        super(MESSAGE_TYPES.TASK_REINDEX);
+        this.datasetId = props.datasetId;
+        this.provider = props.provider;
+        this.legend = props.legend;
+        this.index = props.index;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.datasetId) {
+            throw new InvalidMessage('DatasetId is required');
+        }
+        if (!this.index) {
+            throw new InvalidMessage('Index is required');
+        }
+        if (!this.provider) {
+            throw new InvalidMessage('Provider is required');
+        }
+        if (!this.legend) {
+            throw new InvalidMessage('Legend is required');
+        }
+    }
+}
+
 /**
  * Represents an OverwriteMessage.
  * @constructor
@@ -244,6 +279,8 @@ function createMessage(type, props) {
             return new ConcatMessage(props);
         case MESSAGE_TYPES.TASK_APPEND:
             return new AppendMessage(props);
+        case MESSAGE_TYPES.TASK_REINDEX:
+            return new ReindexMessage(props);
         case MESSAGE_TYPES.TASK_OVERWRITE:
             return new OverwriteMessage(props);
         case MESSAGE_TYPES.TASK_DELETE:

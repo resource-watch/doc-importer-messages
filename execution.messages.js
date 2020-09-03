@@ -9,6 +9,7 @@ const MESSAGE_TYPES = {
     EXECUTION_CONFIRM_DELETE: 'EXECUTION_CONFIRM_DELETE',
     EXECUTION_DELETE_INDEX: 'EXECUTION_DELETE_INDEX',
     EXECUTION_CONFIRM_IMPORT: 'EXECUTION_CONFIRM_IMPORT',
+    EXECUTION_CREATE_INDEX: 'EXECUTION_CREATE_INDEX',
     EXECUTION_REINDEX: 'EXECUTION_REINDEX',
     EXECUTION_CONFIRM_REINDEX: 'EXECUTION_CONFIRM_REINDEX',
     EXECUTION_READ_FILE: 'EXECUTION_READ_FILE'
@@ -128,6 +129,44 @@ class ConfirmReIndexMessage extends Message {
         super.validate();
         if (!this.elasticTaskId) {
             throw new InvalidMessage('ElasticTaskId required');
+        }
+    }
+
+}
+
+/**
+ * Represents a CreateIndexMessage.
+ * Triggers the creation of a new Elasticsearch index.
+ * Needed for a dataset reindex process.
+ *
+ * @constructor
+ * @param {string} taskId - The taskId of the message.
+ * @param {object} props - The props of the message.
+ */
+class CreateIndexMessage extends Message {
+
+    constructor(taskId, props) {
+        super(MESSAGE_TYPES.EXECUTION_CREATE_INDEX, taskId);
+        this.datasetId = props.datasetId;
+        this.provider = props.provider;
+        this.legend = props.legend;
+        this.index = props.index;
+        this.validate();
+    }
+
+    validate() {
+        super.validate();
+        if (!this.datasetId) {
+            throw new InvalidMessage('DatasetId is required');
+        }
+        if (!this.index) {
+            throw new InvalidMessage('Index is required');
+        }
+        if (!this.provider) {
+            throw new InvalidMessage('Provider is required');
+        }
+        if (!this.legend) {
+            throw new InvalidMessage('Legend is required');
         }
     }
 
@@ -383,6 +422,8 @@ function createMessage(type, props) {
             return new ConfirmImportMessage(props.taskId, props);
         case MESSAGE_TYPES.EXECUTION_CONFIRM_REINDEX:
             return new ConfirmReIndexMessage(props.taskId, props);
+        case MESSAGE_TYPES.EXECUTION_CREATE_INDEX:
+            return new CreateIndexMessage(props.taskId, props);
         case MESSAGE_TYPES.EXECUTION_REINDEX:
             return new ReIndexMessage(props.taskId, props);
         case MESSAGE_TYPES.EXECUTION_READ_FILE:
